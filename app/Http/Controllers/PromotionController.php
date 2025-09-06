@@ -15,10 +15,8 @@ class PromotionController extends Controller
     {
         $promotions = Promotion::with('products:id,name,price')->latest()->get();
 
-        return response()->json([
-            'status' => 'success',
-            'data' => $promotions
-        ]);
+        return response()->json($promotions);
+
     }
 
     /**

@@ -17,7 +17,7 @@ class AuthController extends Controller
         $request->validate([
             'name'     => 'required|string|max:255',
             'email'    => 'required|string|email|max:255|unique:users',
-            'password' => ['required', 'confirmed', Password::defaults()],
+            'password' => 'required|confirmed',
             'role'     => 'in:ADMIN,EMPLOYEE,CLIENT',
             'phone'    => 'nullable|string|max:20',
         ]);
@@ -25,7 +25,7 @@ class AuthController extends Controller
         $user = User::create([
             'name'     => $request->name,
             'email'    => $request->email,
-            'password' => $request->password, // Laravel 11 hash auto
+            'password' => bcrypt($request->password),
             'role'     => $request->role ?? 'CLIENT',
             'phone'    => $request->phone,
         ]);
