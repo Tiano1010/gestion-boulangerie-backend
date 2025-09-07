@@ -85,8 +85,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/orders/{order}/cancel', [OrderController::class, 'cancel']);
 
     // ADMIN : changer le statut d'une commande
-    Route::patch('/orders/{order}/status', [OrderController::class, 'updateStatus'])
-        ->middleware('role:ADMIN');
+    // Mise à jour du statut de paiement (client ou admin)
+    Route::patch('/orders/{order}/payment-status', [OrderController::class, 'updatePaymentStatus']);
 
     // Récupérer les statuts possibles d'une commande
     Route::get('/orders/statuses', [OrderController::class, 'statuses']);

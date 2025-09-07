@@ -34,4 +34,16 @@ class User extends Authenticatable
     {
         return $this->hasMany(\App\Models\Address::class);
     }
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($user) {
+            if (!$user->matricule) {
+                $lastId = User::max('id') ?? 0;
+                $user->matricule = 'CLT-' . str_pad($lastId + 1, 4, '0', STR_PAD_LEFT,).'221';
+            }
+        });
+    }
+
 }

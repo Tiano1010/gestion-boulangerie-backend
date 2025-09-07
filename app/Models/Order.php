@@ -14,9 +14,9 @@ class Order extends Model
     use HasFactory;
 
     // Statuts de livraison / exécution
-    public const STATUS_PENDING   = 'PENDING';
-    public const STATUS_PAID      = 'PAID';
-    public const STATUS_CANCELLED = 'CANCELLED';
+    public const STATUS_PENDING   = 'EN_ATTENTE';
+    public const STATUS_PAID      = 'VALIDER';
+    public const STATUS_CANCELLED = 'ANNULER';
 
     public const FULFILLMENT_STATUSES = [
         self::STATUS_PENDING,
@@ -25,9 +25,9 @@ class Order extends Model
     ];
 
     // Statuts de paiement
-    public const PAYMENT_PENDING = 'PENDING';
-    public const PAYMENT_PAID    = 'PAID';
-    public const PAYMENT_FAILED  = 'FAILED';
+    public const PAYMENT_PENDING = 'EN_ATTENTE';
+    public const PAYMENT_PAID    = 'PAYÉ';
+    public const PAYMENT_FAILED  = 'ÉCHOUÉ';
 
     public const PAYMENT_STATUSES = [
         self::PAYMENT_PENDING,
@@ -40,6 +40,7 @@ class Order extends Model
         'address_id',
         'total_price',
         'status',
+        'order_code',
         'payment_status',
     ];
 
@@ -64,6 +65,6 @@ class Order extends Model
 
     public function address()
     {
-        return $this->belongsTo(Address::class);
+        return $this->belongsTo(Address::class,'address_id');
     }
 }
