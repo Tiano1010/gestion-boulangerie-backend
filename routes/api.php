@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ClientController;
+use App\Http\Controllers\PanierController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\AddressController;
@@ -27,10 +28,19 @@ use App\Http\Controllers\UserController;
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
+
+Route::post('/register', [AuthController::class, 'register']);
+Route::post('/login', [AuthController::class, 'login']);
+Route::middleware('auth:sanctum')->group(function () {
+    Route::apiResource('posts', PostController::class);
+    Route::post('/logout', [AuthController::class, 'logout']);
+});
+
 // =======================
 // Routes protégées (auth:sanctum)
 // =======================
 Route::middleware('auth:sanctum')->group(function () {
+
 
     // Infos de l'utilisateur connecté
     Route::get('/me', [AuthController::class, 'me']);
@@ -75,8 +85,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/orders/{order}/cancel', [OrderController::class, 'cancel']);
 
     // ADMIN : changer le statut d'une commande
-    Route::patch('/orders/{order}/status', [OrderController::class, 'updateStatus'])
-        ->middleware('role:ADMIN');
+    // Mise à jour du statut de paiement (client ou admin)
+    Route::patch('/orders/{order}/payment-status', [OrderController::class, 'updatePaymentStatus']);
 
     // Récupérer les statuts possibles d'une commande
     Route::get('/orders/statuses', [OrderController::class, 'statuses']);
@@ -89,6 +99,12 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/client/orders', [ClientController::class, 'orders']);
         Route::post('/client/orders', [ClientController::class, 'createOrder']);
         Route::post('/client/orders/{order}/cancel', [ClientController::class, 'cancelOrder']);
+
+
+        Route::get('/panier', [PanierController::class, 'getPanier']);
+        Route::post('/panier/add', [PanierController::class, 'add']);
+        Route::post('/panier/remove', [PanierController::class, 'remove']);
+        Route::post('/panier/clear', [PanierController::class, 'clearCart']);
     });
 
 });

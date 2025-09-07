@@ -16,7 +16,7 @@ class OrderController extends Controller
     {
         $user = $request->user();
 
-        $query = Order::with(['user:id,name,email,role', 'items.product:id,name,price', 'address'])
+        $query = Order::with(['user:id,name,email,role,matricule', 'items.product:id,name,price', 'address'])
             ->latest();
 
         if ($user->role !== 'ADMIN') {
@@ -24,7 +24,6 @@ class OrderController extends Controller
         }
 
         return response()->json([
-            'status' => 'success',
             'data'   => $query->get()
         ]);
     }
@@ -41,14 +40,20 @@ class OrderController extends Controller
         $products = Product::whereIn('id', $productIds)->get()->keyBy('id');
 
         return DB::transaction(function () use ($user, $payloadItems, $products, $address) {
+            // Génération du code commande
+            $lastOrderId = Order::max('id') ?? 0;
+            $orderCode = 'CMD-' . str_pad($lastOrderId + 1, 6, '0', STR_PAD_LEFT);
+
+            // Matricule client
             $order = Order::create([
                 'user_id'        => $user->id,
                 'address_id'     => $address->id,
                 'status'         => Order::STATUS_PENDING,
                 'payment_status' => Order::PAYMENT_PENDING,
                 'total_price'    => 0,
+                'order_code'     => $orderCode,
             ]);
-
+            $clientMatricule = $user->matricule;
             $total = 0;
 
             foreach ($payloadItems as $it) {
@@ -75,8 +80,7 @@ class OrderController extends Controller
             $order->update(['total_price' => $total]);
 
             return response()->json([
-                'status' => 'success',
-                'data'   => $order->load(['items.product:id,name,price', 'user:id,name,email', 'address'])
+                'data' => $order->load(['items.product:id,name,price', 'user:id,name,email,matricule', 'address'])
             ], 201);
         });
     }
@@ -90,8 +94,7 @@ class OrderController extends Controller
         }
 
         return response()->json([
-            'status' => 'success',
-            'data'   => $order->load(['items.product:id,name,price', 'user:id,name,email', 'address'])
+            'data'   => $order->load(['items.product:id,name,price', 'user:id,name,email,matricule', 'address'])
         ]);
     }
 
@@ -110,8 +113,7 @@ class OrderController extends Controller
         $order->update(['status' => $request->status]);
 
         return response()->json([
-            'status' => 'success',
-            'data'   => $order->fresh()->load(['items.product:id,name,price', 'user:id,name,email', 'address'])
+            'data'   => $order->fresh()->load(['items.product:id,name,price', 'user:id,name,email,matricule', 'address'])
         ]);
     }
 
@@ -135,8 +137,7 @@ class OrderController extends Controller
             $order->update(['status' => Order::STATUS_CANCELLED]);
 
             return response()->json([
-                'status' => 'success',
-                'data'   => $order->fresh()->load(['items.product:id,name,price', 'user:id,name,email', 'address'])
+                'data'   => $order->fresh()->load(['items.product:id,name,price', 'user:id,name,email,matricule', 'address'])
             ]);
         });
     }
@@ -144,11 +145,32 @@ class OrderController extends Controller
     public function statuses(): JsonResponse
     {
         return response()->json([
-            'status' => 'success',
             'data'   => [
                 'fulfillment' => Order::FULFILLMENT_STATUSES,
                 'payment'     => Order::PAYMENT_STATUSES,
             ]
         ]);
     }
+    public function updatePaymentStatus(Request $request, Order $order): JsonResponse
+    {
+        $user = $request->user();
+
+        // Vérif : l'admin OU le client propriétaire peut mettre à jour
+        if ($user->role !== 'ADMIN' && $order->user_id !== $user->id) {
+            return response()->json(['status' => 'error', 'message' => 'Unauthorized'], 403);
+        }
+
+        // Validation du statut de paiement
+        $request->validate([
+            'payment_status' => 'required|in:' . implode(',', Order::PAYMENT_STATUSES),
+        ]);
+
+        // Mise à jour du statut de paiement
+        $order->update(['payment_status' => $request->payment_status]);
+
+        return response()->json([
+            'data' => $order->fresh()->load(['items.product:id,name,price', 'user:id,name,email,matricule', 'address'])
+        ]);
+    }
+
 }

@@ -16,6 +16,7 @@ class Product extends Model
         'name',
         'description',
         'price',
+        'image',
         'category_id',
         'stock',
     ];
@@ -34,6 +35,13 @@ class Product extends Model
     public function promotions()
     {
         return $this->belongsToMany(Promotion::class, 'product_promotion')
+            ->withTimestamps();
+    }
+
+    public function paniers()
+    {
+        return $this->belongsToMany(Panier::class, 'paniers_produits')
+            ->withPivot('quantity')
             ->withTimestamps();
     }
 }
