@@ -1,0 +1,51 @@
+<div class="container mt-4">
+  <div class="card shadow-sm">
+    <div class="card-header bg-primary text-white">
+      <h5>➕ Ajouter un utilisateur</h5>
+    </div>
+    <div class="card-body">
+      <form [formGroup]="utilisateurForm" (ngSubmit)="onSubmit()">
+
+        <!-- Nom -->
+        <div class="mb-3">
+          <label class="form-label">Nom</label>
+          <input type="text" class="form-control" formControlName="name">
+        </div>
+
+        <!-- Email -->
+        <div class="mb-3">
+          <label class="form-label">Email</label>
+          <input type="email" class="form-control" formControlName="email">
+        </div>
+
+        <!-- Rôle -->
+        <div class="mb-3">
+          <label class="form-label">Rôle</label>
+          <select class="form-select" formControlName="role">
+            <option value="">-- Sélectionnez un rôle --</option>
+            <option value="ADMIN">ADMIN</option>
+            <option value="EMPLOYEE">EMPLOYEE</option>
+            <option value="CLIENT">CLIENT</option>
+          </select>
+        </div>
+
+        <!-- Mot de passe -->
+        <div class="mb-3">
+          <label class="form-label">Mot de passe</label>
+          <input type="password" class="form-control" formControlName="password">
+        </div>
+
+        <!-- Téléphone -->
+        <div class="mb-3">
+          <label class="form-label">Téléphone</label>
+          <input type="text" class="form-control" formControlName="phone">
+        </div>
+
+        <!-- Bouton -->
+        <button type="submit" class="btn btn-success w-100" >
+          Enregistrer
+        </button>
+      </form>
+    </div>
+  </div>
+</div>

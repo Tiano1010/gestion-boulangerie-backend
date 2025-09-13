@@ -1,0 +1,16 @@
+<div class="container mt-5">
+  <div class="card shadow p-4">
+    <h2 class="text-center mb-4">Créer un compte</h2>
+    <form [formGroup]="form" (ngSubmit)="register()">
+      <input formControlName="name" type="text" placeholder="Nom" class="form-control mb-3">
+      <input formControlName="email" type="email" placeholder="Email" class="form-control mb-3">
+      <input formControlName="password" type="password" placeholder="Mot de passe" class="form-control mb-3">
+      <input formControlName="password_confirmation" type="password" placeholder="Confirmer mot de passe" class="form-control mb-3">
+      <button type="submit" class="btn btn-success w-100">S’inscrire</button>
+    </form>
+
+    <div class="text-center mt-3">
+      <a routerLink="/login">🔑 Déjà un compte ? Se connecter</a>
+    </div>
+  </div>
+</div>

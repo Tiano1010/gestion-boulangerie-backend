@@ -1,0 +1,39 @@
+<div class="container py-5">
+  <div class="row align-items-center">
+    <!-- Image produit -->
+    <div class="col-md-6 text-center">
+      <img *ngIf="image"
+           [src]="image"
+           class="img-fluid rounded shadow-sm"
+           alt="{{ Name }}">
+    </div>
+
+    <!-- Infos produit -->
+    <div class="col-md-6">
+      <h2 class="fw-bold">{{ Name }}</h2>
+      <p class="text-muted">{{ Description }}</p>
+      <h3 class="text-success fw-bold mb-4">{{ Price }} XOF</h3>
+
+      <!-- Quantité -->
+      <div class="mb-3 d-flex align-items-center gap-2">
+        <label for="quantity" class="form-label fw-bold">Quantité :</label>
+        <input type="number"
+               id="quantity"
+               class="form-control w-25"
+               [(ngModel)]="quantite"
+               min="1">
+      </div>
+
+      <div class="d-grid gap-2">
+        <button class="btn btn-warning btn-lg fw-bold" (click)="ajouterAuPanier()">
+          🛒 Ajouter au panier
+        </button>
+         <button class="btn btn-success btn-lg fw-bold" (click)="commanderProduit()">
+          🛒 Ajouter au panier
+        </button>
+
+        <a routerLink="/home" class="btn btn-outline-secondary">← Retour à la boutique</a>
+      </div>
+    </div>
+  </div>
+</div>

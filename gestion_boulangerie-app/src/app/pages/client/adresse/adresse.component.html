@@ -1,0 +1,49 @@
+<div class="container mt-4">
+  <h2>Mes adresses</h2>
+
+  <div *ngIf="loading">Chargement...</div>
+  <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+
+  <ul class="list-group mb-3">
+    <li class="list-group-item" *ngFor="let addr of adresses">
+      <strong>{{ addr.label || 'Adresse' }}</strong><br />
+      {{ addr.street }}, {{ addr.city }} {{ addr.postal_code }} ({{ addr.country }})
+      <button class="btn btn-sm btn-danger float-end" (click)="deleteAddress(addr.id)">
+        Supprimer
+      </button>
+    </li>
+  </ul>
+
+  <h4>Ajouter une adresse</h4>
+  <form [formGroup]="addressForm" (ngSubmit)="addAddress()" class="row g-3">
+    <div class="col-md-6">
+      <input formControlName="label" class="form-control" placeholder="Label">
+    </div>
+    <div class="col-md-6">
+      <input formControlName="street" class="form-control" placeholder="Rue">
+      <div *ngIf="addressForm.get('street')?.touched && addressForm.get('street')?.invalid" class="text-danger">
+        Rue obligatoire
+      </div>
+    </div>
+    <div class="col-md-6">
+      <input formControlName="city" class="form-control" placeholder="Ville">
+      <div *ngIf="addressForm.get('city')?.touched && addressForm.get('city')?.invalid" class="text-danger">
+        Ville obligatoire
+      </div>
+    </div>
+    <div class="col-md-3">
+      <input formControlName="postal_code" class="form-control" placeholder="Code postal">
+      <div *ngIf="addressForm.get('postal_code')?.touched && addressForm.get('postal_code')?.invalid" class="text-danger">
+        Code postal obligatoire
+      </div>
+    </div>
+    <div class="col-md-3">
+      <input formControlName="country" class="form-control" placeholder="Pays">
+    </div>
+    <div class="col-12">
+      <button class="btn btn-primary" type="submit" [disabled]="addressForm.invalid">
+        Ajouter
+      </button>
+    </div>
+  </form>
+</div>

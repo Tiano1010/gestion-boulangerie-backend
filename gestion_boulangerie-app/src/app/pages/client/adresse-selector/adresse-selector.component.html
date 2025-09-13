@@ -1,0 +1,50 @@
+<!-- Modal Bootstrap -->
+<div class="modal fade" #adresseModal tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <h5 class="modal-title">Sélectionner une adresse</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+
+      <div class="modal-body">
+        <!-- 🔄 Loader -->
+        <div *ngIf="loading" class="text-center">
+          <div class="spinner-border text-primary" role="status"></div>
+        </div>
+
+        <!-- ❌ Erreur -->
+        <div *ngIf="error" class="alert alert-danger">
+          {{ error }}
+        </div>
+
+        <!-- 📋 Liste des adresses -->
+        <div *ngIf="!loading && adresses.length > 0">
+          <div *ngFor="let addr of adresses" class="form-check mb-2">
+            <input class="form-check-input" type="radio"
+                   [value]="addr.id"
+                   name="adresse"
+                   [(ngModel)]="selectedAdresseId">
+            <label class="form-check-label">
+              <strong>{{ addr.label || 'Adresse' }}</strong><br>
+              {{ addr.street }}, {{ addr.city }} ({{ addr.postal_code }}) - {{ addr.country }}
+            </label>
+          </div>
+        </div>
+
+        <!-- 🟡 Pas d'adresses -->
+        <div *ngIf="!loading && adresses.length === 0" class="text-muted">
+          Vous n’avez pas encore ajouté d’adresse.
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+        <button class="btn btn-primary" (click)="confirmSelection()" [disabled]="!selectedAdresseId">
+          Confirmer
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,37 @@
+<div class="container mt-5" *ngIf="!loading && commande">
+  <h2>💳 Paiement de la commande #{{ commande.id }}</h2>
+  <p>Total : <strong>{{ commande.total_price | number:'1.0-0' }} CFA</strong></p>
+
+  <form [formGroup]="paiementForm" (ngSubmit)="payer()">
+    <!-- Champs carte -->
+    <div class="mb-3">
+      <label class="form-label">Nom sur la carte</label>
+      <input type="text" class="form-control" formControlName="cardName">
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Numéro de carte</label>
+      <input type="text" class="form-control" formControlName="cardNumber" maxlength="16">
+    </div>
+
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <label class="form-label">Date d’expiration</label>
+        <input type="text" class="form-control" formControlName="expiry" placeholder="MM/YY">
+      </div>
+      <div class="col-md-6 mb-3">
+        <label class="form-label">CVV</label>
+        <input type="password" class="form-control" formControlName="cvv" maxlength="4">
+      </div>
+    </div>
+
+    <button class="btn btn-success w-100 mt-3" type="submit" >
+      ✅ Payer maintenant
+    </button>
+  </form>
+
+  <!-- Bouton test PDF sans repayer -->
+  <button class="btn btn-outline-primary w-100 mt-3" (click)="genererFacturePDF(commande)" *ngIf="commande.payment_status === 'VALIDE'">
+    📄 Voir la facture
+  </button>
+</div>

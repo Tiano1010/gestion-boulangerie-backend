@@ -1,0 +1,54 @@
+<div class="container mt-4">
+  <div class="card shadow-sm">
+    <div class="card-header bg-primary text-white">
+      <h5>{{ this.id ? '✏️ Modifier la promotion' : '➕ Ajouter une promotion' }}</h5>
+    </div>
+    <div class="card-body">
+      <form [formGroup]="promoForm" (ngSubmit)="submit()">
+
+        <div class="mb-3">
+          <label class="form-label">Titre</label>
+          <input type="text" class="form-control" formControlName="title">
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Description</label>
+          <textarea class="form-control" rows="3" formControlName="description"></textarea>
+        </div>
+
+        <div class="row">
+          <div class="col-md-4 mb-3">
+            <label class="form-label">Réduction (%)</label>
+            <input type="number" class="form-control" formControlName="discount">
+          </div>
+          <div class="col-md-4 mb-3">
+            <label class="form-label">Date début</label>
+            <input type="date" class="form-control" formControlName="start_date">
+          </div>
+          <div class="col-md-4 mb-3">
+            <label class="form-label">Date fin</label>
+            <input type="date" class="form-control" formControlName="end_date">
+          </div>
+        </div>
+       <mat-form-field appearance="outline" class="w-100">
+  <mat-label>Produits concernés</mat-label>
+  <mat-select formControlName="product_ids" multiple>
+    <mat-option *ngFor="let produit of produits" [value]="produit.id">
+      {{ produit.name }} - {{ produit.price }} CFA
+    </mat-option>
+  </mat-select>
+</mat-form-field>
+
+
+        <div class="form-check mb-3">
+          <input type="checkbox" class="form-check-input" formControlName="active" id="active">
+          <label for="active" class="form-check-label">Promotion active</label>
+        </div>
+
+        <button type="submit" class="btn btn-success w-100">
+          {{ this.id? 'Mettre à jour' : 'Enregistrer' }}
+        </button>
+      </form>
+    </div>
+  </div>
+</div>

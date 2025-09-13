@@ -1,0 +1,59 @@
+<div class="container mt-4">
+  <h3>📦 Mes Commandes</h3>
+
+  <!-- Loader -->
+  <div *ngIf="loading" class="text-center p-4">
+    <div class="spinner-border text-primary"></div>
+    <p>Chargement des commandes...</p>
+  </div>
+
+  <!-- Erreur -->
+  <div *ngIf="error" class="alert alert-danger">
+    {{ error }}
+  </div>
+
+  <!-- Pas de commandes -->
+  <div *ngIf="!loading && commandes.length === 0" class="alert alert-info">
+    Vous n'avez encore passé aucune commande.
+  </div>
+
+  <!-- Liste des commandes -->
+  <div *ngFor="let cmd of commandes" class="card mb-3 shadow-sm">
+    <div class="card-header d-flex justify-content-between">
+      <span class="badge bg-info">{{ cmd.status }}</span>
+      <span class="badge bg-warning">Paiement : {{ cmd.payment_status }}</span>
+    </div>
+
+    <div class="card-body">
+      <table class="table table-sm">
+        <thead>
+          <tr>
+            <th>Produit</th>
+            <th>Prix</th>
+            <th>Quantité</th>
+            <th>Sous-total</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of cmd.items">
+            <td>{{ item.product?.name }}</td>
+            <td>{{ item.product?.price | number:'1.0-0' }} CFA</td>
+            <td>{{ item.quantity }}</td>
+            <td>{{ (item.product?.price || 0) * item.quantity | number:'1.0-0' }} CFA</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h5 class="text-end">Total: {{ cmd.total_price | number:'1.0-0' }} CFA</h5>
+
+      <!-- Bouton payer si paiement non validé -->
+      <div class="text-end mt-2">
+        <button *ngIf="cmd.payment_status !== 'VALIDE'"
+        class="btn btn-primary"
+        [routerLink]="['/payment', cmd.id]">
+  💳 Payer ma commande
+    </button>
+      </div>
+    </div>
+  </div>
+</div>

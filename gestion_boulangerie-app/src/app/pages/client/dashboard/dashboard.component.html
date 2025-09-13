@@ -1,0 +1,43 @@
+<div class="container mt-4">
+  <h2 class="mb-4 text-center">🥐 Nos Produits</h2>
+
+  <div class="row g-4">
+    <div class="col-md-3" *ngFor="let produit of produits">
+      <div class="card h-100 shadow-sm position-relative">
+
+        <!-- Image + badge promo -->
+        <div class="position-relative">
+<img *ngIf="produit.image_url" [src]="produit.image_url" class="card-img-top" alt="{{ produit.name }}">
+          
+          <!-- Badge -X% -->
+          <span *ngIf="produit.prixFinal !== produit.price"
+                class="badge bg-danger position-absolute top-0 start-0 m-2 p-2">
+            -{{ ((1 - (produit.prixFinal! / produit.price)) * 100) | number:'1.0-0' }}%
+          </span>
+        </div>
+
+        <div class="card-body text-center">
+          <h5 class="card-title">{{ produit.name }}</h5>
+          <p class="card-text text-muted">{{ produit.description }}</p>
+
+          <!-- Prix promo ou normal -->
+          <div *ngIf="produit.prixFinal !== produit.price; else normalPrice">
+            <span class="text-muted text-decoration-line-through">
+              {{ produit.price | number:'1.0-0' }} FCFA
+            </span>
+            <span class="fw-bold text-danger ms-2">
+              {{ produit.prixFinal | number:'1.0-0' }} FCFA
+            </span>
+          </div>
+          <ng-template #normalPrice>
+            <span class="fw-bold">{{ produit.price | number:'1.0-0' }} FCFA</span>
+          </ng-template>
+        </div>
+
+        <div class="card-footer bg-transparent text-center">
+          <button class="btn btn-sm btn-primary">Ajouter au Panier</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,28 @@
+<div class="container mt-4">
+  <div class="card shadow-sm">
+    <div class="card-header bg-primary text-white">
+      <h5>➕ Ajouter un produit</h5>
+    </div>
+    <div class="card-body">
+      <form [formGroup]="CategorieForm" (ngSubmit)="submit()">
+        
+        <div class="mb-3">
+          <label class="form-label">Nom du produit</label>
+          <input type="text" class="form-control" formControlName="name">
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Description</label>
+          <textarea class="form-control" rows="3" formControlName="description"></textarea>
+        </div>
+
+       
+
+      
+
+        <button type="submit" class="btn btn-success w-100" >
+         {{this.id?"Modifier la Categorie": "Ajouter une Categorie"}}         </button>
+      </form>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,33 @@
+<h1>Gestion des promotions 
+</h1>
+
+<button class="btn btn-outline-success" routerLink="/addPromotion">Nouvelle Promotion</button>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Titre</th>
+            <th>Description</th>
+            <th>Réduction (%)</th>
+            <th>Date de début</th>
+            <th>Date de fin</th>
+            <th>Actif</th>
+            <th>ID Produit</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let promotion of promotions">
+            <td>{{ promotion.id }}</td>
+            <td>{{ promotion.title }}</td>
+            <td>{{ promotion.description }}</td>
+            <td>{{ promotion.discount }}%</td>
+            <td>{{ promotion.start_date }}</td>
+            <td>{{ promotion.end_date }}</td>
+            <td>{{ promotion.active ? 'Oui' : 'Non' }}</td>
+            <td>
+                <button class="btn btn-primary" routerLink="/updatePromotion/+{{promotion.id}}">Modifier</button>
+                <button class="btn btn-sm btn-danger" (click)="deletePromotion(promotion.id)">🗑️ Supprimer</button>
+        </tr>
+</table>

@@ -1,0 +1,23 @@
+<H1>Gestion CAtegorie</H1>
+<button class="btn btn-outline-success" routerLink="/addCategorie">Nouveau Categorie</button>
+<div class="container mt-4">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nom</th>
+                <th>Description</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let categorie of categories">
+                <td>{{ categorie.id }}</td>
+                <td>{{categorie.name}}</td>
+                <td>{{categorie.description}}</td>
+                <td>
+                    <button class="btn btn-primary" routerLink="/updateCategorie/+{{categorie.id}}">Modifier</button>
+                    <button class="btn btn-sm btn-danger" (click)="deleteCategorie(categorie.id)">🗑️ Supprimer</button>
+            </tr>
+        </tbody>
+    </table>

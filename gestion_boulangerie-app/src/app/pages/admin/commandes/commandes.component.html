@@ -1,0 +1,42 @@
+<div *ngIf="loading">Chargement...</div>
+<div *ngIf="error" class="error">{{ error }}</div>
+
+<div class="mb-3">
+  <input type="text"
+         class="form-control"
+         placeholder="Rechercher par code commande..."
+         [(ngModel)]="searchCode">
+</div>
+
+<table class="table table-striped" *ngIf="!loading && !error">
+  <thead>
+    <tr>
+      <th>Code</th>
+      <th>Client</th>
+      <th>Status</th>
+      <th>Paiement</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let commande of commandesFiltrees">
+      <td>{{ commande.order_code }}</td>
+      <td>{{ commande.user?.name }}</td>
+      <td>{{ commande.status }}</td>
+      <td>{{ commande.payment_status }}</td>
+      <td>
+        <button class="btn btn-success btn-sm"
+                [disabled]="commande.payment_status !== 'PAYÉ' || commande.status === 'VALIDER'"
+                (click)="updateStatus(commande, 'VALIDER')">
+          Valider
+        </button>
+
+        <button class="btn btn-danger btn-sm"
+                (click)="updateStatus(commande, 'ANNULER')">
+          Annuler
+        </button>
+    </tr>
+  </tbody>
+</table>
+
+

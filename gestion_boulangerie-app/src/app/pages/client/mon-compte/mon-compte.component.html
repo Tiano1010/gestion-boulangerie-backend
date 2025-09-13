@@ -1,0 +1,52 @@
+<div class="container mt-4">
+  <h2>Mon Compte</h2>
+
+  <div *ngIf="utilisateur" class="card p-3 mb-3">
+    <h4>{{ utilisateur.name }}</h4>
+    <p>Email : {{ utilisateur.email }}</p>
+    <p>Téléphone : {{ utilisateur.phone }}</p>
+  </div>
+
+  <h3>Mes adresses</h3>
+
+  <div *ngIf="loading">Chargement...</div>
+  <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+
+  <ul class="list-group mb-3">
+    <li class="list-group-item" *ngFor="let addr of addresses">
+      <div *ngIf="editingId !== addr.id">
+        <strong>{{ addr.label || 'Adresse' }}</strong><br />
+        {{ addr.street }}, {{ addr.city }} {{ addr.postal_code }} ({{ addr.country }})
+        <div class="mt-2">
+          <button class="btn btn-sm btn-warning me-2" (click)="startEdit(addr)">Modifier</button>
+          <button class="btn btn-sm btn-danger" (click)="deleteAddress(addr.id)">Supprimer</button>
+        </div>
+      </div>
+
+      <!-- Formulaire d'édition -->
+      <form *ngIf="editingId === addr.id" [formGroup]="editForm" (ngSubmit)="updateAddress()" class="row g-2">
+        <div class="col-md-6"><input formControlName="label" class="form-control" placeholder="Label"></div>
+        <div class="col-md-6"><input formControlName="street" class="form-control" placeholder="Rue"></div>
+        <div class="col-md-6"><input formControlName="city" class="form-control" placeholder="Ville"></div>
+        <div class="col-md-3"><input formControlName="postal_code" class="form-control" placeholder="Code postal"></div>
+        <div class="col-md-3"><input formControlName="country" class="form-control" placeholder="Pays"></div>
+        <div class="col-12">
+          <button class="btn btn-success me-2" type="submit">Enregistrer</button>
+          <button class="btn btn-secondary" type="button" (click)="cancelEdit()">Annuler</button>
+        </div>
+      </form>
+    </li>
+  </ul>
+
+  <h4>Ajouter une adresse</h4>
+  <form [formGroup]="addressForm" (ngSubmit)="addAddress()" class="row g-3">
+    <div class="col-md-6"><input formControlName="label" class="form-control" placeholder="Label"></div>
+    <div class="col-md-6"><input formControlName="street" class="form-control" placeholder="Rue" required></div>
+    <div class="col-md-6"><input formControlName="city" class="form-control" placeholder="Ville" required></div>
+    <div class="col-md-3"><input formControlName="postal_code" class="form-control" placeholder="Code postal" required></div>
+    <div class="col-md-3"><input formControlName="country" class="form-control" placeholder="Pays"></div>
+    <div class="col-12">
+      <button class="btn btn-primary" type="submit" [disabled]="addressForm.invalid">Ajouter</button>
+    </div>
+  </form>
+</div>

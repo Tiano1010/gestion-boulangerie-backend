@@ -1,0 +1,82 @@
+<div *ngIf="authService.isLoggedIn(); else notLoggedIn">
+  
+  <!-- ADMIN & EMPLOYEE -->
+  <div *ngIf="authService.getUserRole() === 'ADMIN' || authService.getUserRole() === 'EMPLOYEE'">
+    <div class="d-flex" id="wrapper">
+
+      <!-- Sidebar -->
+      <div class="border-end bg-white" id="sidebar-wrapper">
+        <div class="sidebar-heading border-bottom bg-primary text-white text-center py-3">
+          🥐 Boulangerie 
+        </div>
+        <div class="list-group list-group-flush">
+          <a routerLink="/admin/dashboard" class="list-group-item list-group-item-action">📊 Dashboard</a>
+          <a routerLink="/admin/produit" class="list-group-item list-group-item-action">🍞 Produits</a>
+          <a routerLink="/admin/categorie" class="list-group-item list-group-item-action">📂 Catégories</a>
+          <a routerLink="/admin/promotion" class="list-group-item list-group-item-action">💸 Promotions</a>
+          <a routerLink="/admin/commande" class="list-group-item list-group-item-action">📦 Commandes</a>
+          <a routerLink="/admin/utilisateur" class="list-group-item list-group-item-action">👥 Utilisateurs</a>
+        </div>
+      </div>
+
+      <!-- Content -->
+      <div id="page-content-wrapper" class="flex-grow-1">
+
+        <!-- ✅ Topbar -->
+        <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom shadow-sm px-3">
+          <div class="container-fluid">
+            <span class="navbar-brand fw-bold">Tableau de bord</span>
+            <div class="ms-auto">
+              <button class="btn btn-outline-danger btn-sm" (click)="logout()">
+                🚪 Déconnexion
+              </button>
+            </div>
+          </div>
+        </nav>
+
+        <!-- Page Content -->
+        <div class="p-4">
+          <router-outlet></router-outlet>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CLIENT -->
+  <div *ngIf="authService.getUserRole() === 'CLIENT'">
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
+      <div class="container">
+        <a class="navbar-brand fw-bold" routerLink="/home">🥐 Boulangerie</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+          data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false"
+          aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item"><a class="nav-link" routerLink="/home">Accueil</a></li>
+            <li class="nav-item"><a class="nav-link" routerLink="client/dashboard">Produits</a></li>
+            <li class="nav-item"><a class="nav-link" routerLink="/client/panier">Mon Panier</a></li>
+            <li class="nav-item"><a class="nav-link" routerLink="/client/commande">Mes Commandes</a></li>
+            <li class="nav-item"><a class="nav-link" routerLink="/client/mon-compte">Mon Compte</a></li>
+            <li class="nav-item"><a class="nav-link" (click)="logout()">Déconnexion</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Contenu -->
+    <div class="container mt-4">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</div>
+
+<!-- NON CONNECTÉ -->
+<ng-template #notLoggedIn>
+  <div class="text-center mt-5">
+    <router-outlet></router-outlet>
+  </div>
+</ng-template>

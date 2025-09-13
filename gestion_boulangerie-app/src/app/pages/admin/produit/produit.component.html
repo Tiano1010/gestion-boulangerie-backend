@@ -1,0 +1,29 @@
+
+Gestion des Produits 
+<button class="btn btn-outline-success" routerLink="/addProduits">Nouveau Produits</button>
+<div class="container mt-4">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Description</th>
+                <th>Prix</th>
+                <th>Stock</th>
+                <th>Catégorie ID</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let produit of produits">
+                <td>{{ produit.id }}</td>
+                <td>{{produit.name}}</td>
+                <td>{{ produit.description }}</td>
+                <td>{{ produit.price }} FCFA</td>
+                <td>{{ produit.stock }}</td>
+                <td>{{ produit.category_id }}</td>
+                <td>
+                    <button class="btn btn-primary" routerLink="/updateProduit/+{{produit.id}}">Modifier</button>
+                    <button class="btn btn-sm btn-danger" (click)="deleteProduit(produit.id)">🗑️ Supprimer</button>
+            </tr>
+        </tbody>
+    </table>
